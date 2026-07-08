@@ -19,9 +19,9 @@ export const signup = async (req, res) => {
 
         const newUser = await User.create({ name, email, password, username });
 
-        const verifucationtoken = newUser._id + Math.randam().toString(36);
+        const verifucationtoken = newUser._id + Math.random().toString(36);
         newUser.verificationToken = verifucationtoken;
-        await username.save();
+        await newUser.save();
 
         await verificationEmailTemplate(email, verifucationtoken);
 
@@ -53,5 +53,30 @@ export const signup = async (req, res) => {
 }
 
 export const verifyEmail = async (req, res) => {
-    
+    try {
+        const { token } = req.params;
+        const user = await User.findOne({ verificationToken: token });
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                error: "Invalid verification token"
+            })
+        }
+
+        user.isVerified = true;
+        user.verificationToken = null;
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Email verified successfully"
+        });
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            error: error.message
+        })
+    }
+
 }
