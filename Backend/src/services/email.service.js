@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { config } from "../config/env";
+import { config } from "../config/env.js";
 
 const transporter= nodemailer.createTransport({
     service:'gmail',
@@ -13,7 +13,7 @@ const transporter= nodemailer.createTransport({
 export const sendEmail=async (to,subject,html)=>{
     try{
 
-        await treansporter.sendMail({
+        await transporter.sendMail({
             from: config.email,
             to:to,
             subject:subject,
@@ -24,8 +24,8 @@ console.error(" error mail ",err.message);
 throw new Error("failed to send mail");
     }
 }
-export const verificationEmailTemplate= async ( email, token){
-    const link ="wwww.htttt.com/verifu@email";
+export const verificationEmailTemplate= async ( email, token)=>{
+    const link = `http://localhost:5000/api/auth/verify/${token}`;
 
 const html=`
 <h1> welcome </h1>

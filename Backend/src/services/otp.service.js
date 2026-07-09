@@ -1,11 +1,11 @@
 import OTP from "../models/otp.model.js";
 import User from "../models/user.model.js";
-import sendEmail from "./email.service.js";
+import {sendEmail} from "./email.service.js";
 export const generateOTP = () => {
     return Math.floor(100000 + Math.random() * 900000).toString()//"958618" 
 }
 export const createOTP = async (email, purpose) => {
-    await OTP.deleteMany({ email, purpose, verified: False });
+    await OTP.deleteMany({ email, purpose, verified: false });
     const otp = generateOTP();
     const newOTP = await OTP.create({ email, purpose, otp });
     return newOTP;
@@ -28,10 +28,10 @@ export const sendOtpEmail = async (email, otp, purpose) => {
     else if (purpose === "login") {
         subject = "verify login"
         message = `log in   otp :${otp}`}
-    else if (putpose === "reset") {
+    else if (purpose === "reset") {
         subject = "verify reset"
         message = `reset  otp :${otp}`
     }
 
-    await (sendEmail, subject, message);
+    await sendEmail(email, subject, message);
 }

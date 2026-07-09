@@ -33,7 +33,7 @@ export const signup = async (req, res) => {
             data: {
                 token: token,
                 user: {
-                    id: newUser_id,
+                    id: newUser._id,
                     name: newUser.name,
                     userName: newUser.username,
                     email: newUser.email,
@@ -45,11 +45,17 @@ export const signup = async (req, res) => {
 
 
     } catch (error) {
-        res.status(400).json({
-            success: false,
-            error: error.message
-        })
-    }
+    console.error("====== ERROR ======");
+    console.error(error);
+    console.error(error.stack);
+
+    return res.status(400).json({
+        success: false,
+        destination: "signup",
+        error: error.message
+    });
+}
+    
 }
 
 export const verifyEmail = async (req, res) => {

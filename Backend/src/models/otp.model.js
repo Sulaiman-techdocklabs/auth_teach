@@ -1,4 +1,4 @@
-import mongoose, { Types } from "mongoose";
+import mongoose from "mongoose";
 
 
 const otpSchema = new mongoose.Schema({
@@ -27,7 +27,7 @@ const otpSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-otpSchema = index({ expiresAt: 1 }, { expireAfterSeconds: 0 })
+otpSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 })
 
 const Otp = mongoose.model('Otp', otpSchema);
 export default Otp;
