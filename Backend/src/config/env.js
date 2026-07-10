@@ -8,7 +8,9 @@ export const config={
     jwtExpire:process.env.JWT_EXPIRE,
     sessionSecret:process.env.SESSION_SECRET,
     emailPassword:process.env.EMAIL_PASSWORD,
-    email:process.env.EMAIL
+    email:process.env.EMAIL,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    googleCallbackUrl: process.env.GOOGLE_CALLBACK_URL,
+    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5000',
 }
-
-console.log("Configuration:", config);
