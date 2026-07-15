@@ -1,8 +1,8 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
-import User from '../models/userModel.js';
+import User from '../models/user.model.js';
 import { config } from './env.js';
-import { generateToken } from '../services/tokenService.js';
+import { generateToken } from '../services/token.service.js';
 
 // ============================================
 // GOOGLE OAUTH STRATEGY

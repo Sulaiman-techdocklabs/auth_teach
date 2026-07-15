@@ -198,7 +198,7 @@ export const login = async (req, res) => {
     }
 }
 
-export const verifyLoginOTP = async (req, res) => {
+export const loginOtpVerify = async (req, res) => {
     try {
         const { email, otp } = req.body;
         

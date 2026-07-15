@@ -6,12 +6,12 @@ import {
     verifyEmail,
     login,
     sendLoginOtp,
-    // loginOtpVerify,
-    // googleCallback,
-    // forgotPassword,
-    // resetPassword
-    // , getMe
-    // , logout
+    loginOtpVerify,
+    googleCallback,
+    forgotPassword,
+    resetPassword
+    , getMe
+    , logout
 } from "../controllers/auth.controller.js";
 
 

@@ -3,7 +3,7 @@ import cors from "cors";
 import { config } from "dotenv";
 import session from 'express-session';
 import passport from 'passport';
-import { errorHandler } from './middleware/errorHandler.js';
+import { errorHandler } from './middlewares/errorHandler.js';
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/auth.routes.js"; 
 import './config/passport.js';
