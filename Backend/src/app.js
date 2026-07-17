@@ -1,11 +1,17 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
+config();
 import { config } from "dotenv";
 import session from 'express-session';
 import passport from 'passport';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/auth.routes.js"; 
+import studentRoutes from "./routes/student.routes.js";
+import teacherRoutes from "./routes/teacher.routes.js";
+import courseRoutes from "./routes/course.routes.js";
+import enrollmentRoutes from "./routes/enrollment.routes.js";
 import './config/passport.js';
 
 const app= express();
@@ -17,6 +23,7 @@ const allowedOrigins = [
     'http://localhost:5500',
     'http://localhost:5000',
     'http://127.0.0.1:5500',
+    'http://192.168.88.5:5500',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -50,7 +57,7 @@ app.use((req, res, next) => {
 
 
 app.use(session({
-    secret: config.sessionSecret,
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false
 }));
@@ -69,6 +76,13 @@ app.get('/test', (req, res) => {
     });
 });
 app.use('/api/auth',authRouter)
+app.use("/api/students", studentRoutes);
+
+app.use("/api/teachers", teacherRoutes);
+
+app.use("/api/courses", courseRoutes);
+
+app.use("/api/enrollments", enrollmentRoutes);
 
 app.use((req, res) => {
     res.status(404).json({
