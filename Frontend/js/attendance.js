@@ -1,8 +1,10 @@
 ﻿import { authAPI, attendanceAPI } from './api.js';
 import { showToast, formatDate, formatTime, formatHours, getStatusBadge, checkAuth, handleLogout } from './utils.js';
+
 if (!checkAuth()) {
     window.location.href = 'index.html';
 }
+
 const userNameEl = document.getElementById('userName');
 const todayStatusEl = document.getElementById('todayStatus');
 const todayPunchInEl = document.getElementById('todayPunchIn');
@@ -12,6 +14,7 @@ const punchInBtn = document.getElementById('punchInBtn');
 const punchOutBtn = document.getElementById('punchOutBtn');
 const attendanceTableBody = document.getElementById('attendanceTableBody');
 const logoutBtn = document.getElementById('logoutBtn');
+
 async function loadAttendance() {
     try {
         const userData = await authAPI.getMe();
@@ -28,6 +31,7 @@ async function loadAttendance() {
         console.error('Attendance error:', error);
     }
 }
+
 function updateTodayAttendance(records) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -63,6 +67,7 @@ function updateTodayAttendance(records) {
         punchOutBtn.disabled = true;
     }
 }
+
 function renderAttendanceHistory(records) {
     if (!records || records.length === 0) {
         attendanceTableBody.innerHTML = `
@@ -87,15 +92,16 @@ function renderAttendanceHistory(records) {
     });
     attendanceTableBody.innerHTML = html;
 }
+
 if (punchInBtn) {
     punchInBtn.addEventListener('click', async () => {
         try {
             punchInBtn.disabled = true;
             punchInBtn.textContent = 'Processing...';
-            const data = await attendanceAPI.punchIn();
+            await attendanceAPI.punchIn();
             showToast('Punch In successful!', 'success');
             await loadAttendance();
-            punchInBtn.textContent = '<i class="fas fa-fingerprint"></i> Punch In';
+            punchInBtn.innerHTML = '<i class="fas fa-fingerprint"></i> Punch In';
         } catch (error) {
             showToast(error.message, 'error');
             punchInBtn.disabled = false;
@@ -103,12 +109,13 @@ if (punchInBtn) {
         }
     });
 }
+
 if (punchOutBtn) {
     punchOutBtn.addEventListener('click', async () => {
         try {
             punchOutBtn.disabled = true;
             punchOutBtn.textContent = 'Processing...';
-            const data = await attendanceAPI.punchOut();
+            await attendanceAPI.punchOut();
             showToast('Punch Out successful!', 'success');
             await loadAttendance();
             punchOutBtn.innerHTML = '<i class="fas fa-fingerprint"></i> Punch Out';
@@ -119,16 +126,22 @@ if (punchOutBtn) {
         }
     });
 }
+
+// FIXED: Logout handler
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
+    logoutBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
         try {
             await authAPI.logout();
-            handleLogout();
         } catch (error) {
-            handleLogout();
+            console.error('Logout API error:', error);
+        } finally {
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
         }
     });
 }
+
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.getElementById('sidebar');
 if (menuToggle && sidebar) {
@@ -136,5 +149,6 @@ if (menuToggle && sidebar) {
         sidebar.classList.toggle('open');
     });
 }
+
 loadAttendance();
 setInterval(loadAttendance, 30000);

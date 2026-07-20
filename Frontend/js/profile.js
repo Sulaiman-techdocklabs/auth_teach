@@ -1,8 +1,10 @@
 ﻿import { authAPI } from './api.js';
 import { showToast, checkAuth, handleLogout } from './utils.js';
+
 if (!checkAuth()) {
     window.location.href = 'index.html';
 }
+
 const userNameEl = document.getElementById('userName');
 const profileNameEl = document.getElementById('profileName');
 const profileFullNameEl = document.getElementById('profileFullName');
@@ -13,6 +15,7 @@ const profileProviderEl = document.getElementById('profileProvider');
 const profileJoinedEl = document.getElementById('profileJoined');
 const profileStatusEl = document.getElementById('profileStatus');
 const logoutBtn = document.getElementById('logoutBtn');
+
 async function loadProfile() {
     try {
         const data = await authAPI.getMe();
@@ -53,16 +56,22 @@ async function loadProfile() {
         console.error('Profile error:', error);
     }
 }
+
+// FIXED: Logout handler
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
+    logoutBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
         try {
             await authAPI.logout();
-            handleLogout();
         } catch (error) {
-            handleLogout();
+            console.error('Logout API error:', error);
+        } finally {
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
         }
     });
 }
+
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.getElementById('sidebar');
 if (menuToggle && sidebar) {
@@ -70,4 +79,5 @@ if (menuToggle && sidebar) {
         sidebar.classList.toggle('open');
     });
 }
+
 loadProfile();

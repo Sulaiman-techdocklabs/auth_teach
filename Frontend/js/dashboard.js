@@ -1,8 +1,10 @@
 ﻿import { authAPI, attendanceAPI, leaveAPI } from './api.js';
 import { showToast, formatDate, formatTime, formatHours, getStatusBadge, checkAuth, handleLogout } from './utils.js';
+
 if (!checkAuth()) {
     window.location.href = 'index.html';
 }
+
 const userNameEl = document.getElementById('userName');
 const presentDaysEl = document.getElementById('presentDays');
 const halfDaysEl = document.getElementById('halfDays');
@@ -14,6 +16,7 @@ const todayPunchOutEl = document.getElementById('todayPunchOut');
 const todayTotalHoursEl = document.getElementById('todayTotalHours');
 const recentActivityEl = document.getElementById('recentActivity');
 const logoutBtn = document.getElementById('logoutBtn');
+
 async function loadDashboard() {
     try {
         const userData = await authAPI.getMe();
@@ -35,6 +38,7 @@ async function loadDashboard() {
         console.error('Dashboard error:', error);
     }
 }
+
 function updateStats(attendanceRecords) {
     let present = 0, half = 0, absent = 0;
     attendanceRecords.forEach(record => {
@@ -46,6 +50,7 @@ function updateStats(attendanceRecords) {
     halfDaysEl.textContent = half;
     absentDaysEl.textContent = absent;
 }
+
 function updateTodayAttendance(records) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -75,6 +80,7 @@ function updateTodayAttendance(records) {
         todayTotalHoursEl.textContent = '0.00';
     }
 }
+
 function updateRecentActivity(records) {
     const recent = records.slice(0, 5);
     if (recent.length === 0) {
@@ -99,16 +105,24 @@ function updateRecentActivity(records) {
     });
     recentActivityEl.innerHTML = html;
 }
+
+// FIXED: Logout handler
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
+    logoutBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
         try {
+            // Try to call logout API
             await authAPI.logout();
-            handleLogout();
         } catch (error) {
-            handleLogout();
+            console.error('Logout API error:', error);
+        } finally {
+            // Always clear token and redirect
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
         }
     });
 }
+
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.getElementById('sidebar');
 if (menuToggle && sidebar) {
@@ -116,5 +130,6 @@ if (menuToggle && sidebar) {
         sidebar.classList.toggle('open');
     });
 }
+
 loadDashboard();
 setInterval(loadDashboard, 60000);

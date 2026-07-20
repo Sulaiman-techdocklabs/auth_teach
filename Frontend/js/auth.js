@@ -16,7 +16,7 @@ function showLogin() {
     document.querySelectorAll('.auth-card').forEach(card => {
         card.style.display = 'none';
     });
-    const loginCard = document.querySelector('.auth-card');
+    const loginCard = document.getElementById('loginCard');
     if (loginCard) {
         loginCard.style.display = 'block';
     }
@@ -32,6 +32,26 @@ function showForgotPassword() {
     }
 }
 
+// Make functions globally accessible for onclick
+window.showSignup = showSignup;
+window.showLogin = showLogin;
+window.showForgotPassword = showForgotPassword;
+
+// Toggle password visibility - make globally accessible
+window.togglePassword = function(inputId, button) {
+    const input = document.getElementById(inputId);
+    if (!input) return;
+    
+    const icon = button.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fas fa-eye-slash';
+    } else {
+        input.type = 'password';
+        icon.className = 'fas fa-eye';
+    }
+};
+
 // Check if already logged in
 if (localStorage.getItem('token')) {
     window.location.href = 'dashboard.html';
@@ -39,58 +59,6 @@ if (localStorage.getItem('token')) {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    // Navigation links
-    const signupLink = document.getElementById('signupLink');
-    const loginLink = document.getElementById('loginLink');
-    const forgotLink = document.getElementById('forgotLink');
-    const backToLoginLink = document.getElementById('backToLoginLink');
-
-    if (signupLink) {
-        signupLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            showSignup();
-        });
-    }
-
-    if (loginLink) {
-        loginLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            showLogin();
-        });
-    }
-
-    if (forgotLink) {
-        forgotLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            showForgotPassword();
-        });
-    }
-
-    if (backToLoginLink) {
-        backToLoginLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            showLogin();
-        });
-    }
-
-    // Toggle password visibility
-    document.querySelectorAll('.toggle-password').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-target');
-            const input = document.getElementById(targetId);
-            const icon = this.querySelector('i');
-            if (input && icon) {
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.className = 'fas fa-eye-slash';
-                } else {
-                    input.type = 'password';
-                    icon.className = 'fas fa-eye';
-                }
-            }
-        });
-    });
-
     // Login Form
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {

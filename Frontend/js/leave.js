@@ -1,12 +1,15 @@
 ﻿import { authAPI, leaveAPI } from './api.js';
 import { showToast, formatDate, getStatusBadge, checkAuth, handleLogout } from './utils.js';
+
 if (!checkAuth()) {
     window.location.href = 'index.html';
 }
+
 const userNameEl = document.getElementById('userName');
 const leaveForm = document.getElementById('leaveForm');
 const leaveTableBody = document.getElementById('leaveTableBody');
 const logoutBtn = document.getElementById('logoutBtn');
+
 async function loadLeaves() {
     try {
         const userData = await authAPI.getMe();
@@ -22,6 +25,7 @@ async function loadLeaves() {
         console.error('Leave error:', error);
     }
 }
+
 function renderLeaveHistory(records) {
     if (!records || records.length === 0) {
         leaveTableBody.innerHTML = `
@@ -45,6 +49,7 @@ function renderLeaveHistory(records) {
     });
     leaveTableBody.innerHTML = html;
 }
+
 if (leaveForm) {
     leaveForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -59,7 +64,7 @@ if (leaveForm) {
             const submitBtn = leaveForm.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Applying...';
-            const data = await leaveAPI.apply({ leaveType, leaveDate, reason });
+            await leaveAPI.apply({ leaveType, leaveDate, reason });
             showToast('Leave applied successfully!', 'success');
             leaveForm.reset();
             await loadLeaves();
@@ -73,16 +78,22 @@ if (leaveForm) {
         }
     });
 }
+
+// FIXED: Logout handler
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', async () => {
+    logoutBtn.addEventListener('click', async function(e) {
+        e.preventDefault();
         try {
             await authAPI.logout();
-            handleLogout();
         } catch (error) {
-            handleLogout();
+            console.error('Logout API error:', error);
+        } finally {
+            localStorage.removeItem('token');
+            window.location.href = 'index.html';
         }
     });
 }
+
 const menuToggle = document.getElementById('menuToggle');
 const sidebar = document.getElementById('sidebar');
 if (menuToggle && sidebar) {
@@ -90,9 +101,11 @@ if (menuToggle && sidebar) {
         sidebar.classList.toggle('open');
     });
 }
+
 const leaveDateInput = document.getElementById('leaveDate');
 if (leaveDateInput) {
     const today = new Date().toISOString().split('T')[0];
     leaveDateInput.setAttribute('min', today);
 }
+
 loadLeaves();
