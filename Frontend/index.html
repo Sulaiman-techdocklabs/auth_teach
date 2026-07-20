@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Employee Management System</title>
+    <link rel="stylesheet" href="css/auth.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-users-cog"></i>
+                    <h1>Employee Management</h1>
+                </div>
+                <p class="subtitle">Sign in to your account</p>
+            </div>
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label for="loginIdentifier">Email or Username</label>
+                    <input type="text" id="loginIdentifier" placeholder="Enter your email or username" required />
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="loginPassword" placeholder="Enter your password" required />
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('loginPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="form-options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="rememberMe" />
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" onclick="showForgotPassword()" class="forgot-link">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            </form>
+            <!-- OTP Login Section -->
+            <div class="divider"><span>or continue with</span></div>
+            <div class="otp-section">
+                <form id="otpSendForm" class="otp-send-form">
+                    <div class="form-group">
+                        <label for="otpEmail">Email</label>
+                        <input type="email" id="otpEmail" placeholder="Enter your email" required />
+                    </div>
+                    <button type="submit" class="btn btn-secondary btn-block">Send OTP</button>
+                </form>
+                <form id="otpVerifyForm" class="otp-verify-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="otpCode">Enter OTP</label>
+                        <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" maxlength="6" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Verify OTP</button>
+                </form>
+            </div>
+            <div class="social-auth">
+                <a href="http://localhost:5000/api/auth/google" class="btn btn-google">
+                    <i class="fab fa-google"></i>
+                    Continue with Google
+                </a>
+            </div>
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="#" onclick="showSignup()">Sign Up</a></p>
+            </div>
+        </div>
+        <!-- Signup Form (Hidden) -->
+        <div class="auth-card" id="signupCard" style="display: none;">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-users-cog"></i>
+                    <h1>Employee Management</h1>
+                </div>
+                <p class="subtitle">Create your account</p>
+            </div>
+            <form id="signupForm" class="auth-form">
+                <div class="form-group">
+                    <label for="signupName">Full Name</label>
+                    <input type="text" id="signupName" placeholder="Enter your full name" required />
+                </div>
+                <div class="form-group">
+                    <label for="signupUsername">Username</label>
+                    <input type="text" id="signupUsername" placeholder="Choose a username" required />
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email Address</label>
+                    <input type="email" id="signupEmail" placeholder="Enter your email" required />
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="signupPassword" placeholder="Create a password (min 6 characters)" required />
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('signupPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            </form>
+            <div class="auth-footer">
+                <p>Already have an account? <a href="#" onclick="showLogin()">Sign In</a></p>
+            </div>
+        </div>
+        <!-- Forgot Password (Hidden) -->
+        <div class="auth-card" id="forgotCard" style="display: none;">
+            <div class="auth-header">
+                <div class="logo">
+                    <i class="fas fa-users-cog"></i>
+                    <h1>Employee Management</h1>
+                </div>
+                <p class="subtitle">Reset your password</p>
+            </div>
+            <form id="forgotForm" class="auth-form">
+                <div class="form-group">
+                    <label for="forgotEmail">Email Address</label>
+                    <input type="email" id="forgotEmail" placeholder="Enter your registered email" required />
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Send Reset OTP</button>
+            </form>
+            <form id="resetForm" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="resetOTP">OTP Code</label>
+                    <input type="text" id="resetOTP" placeholder="Enter OTP" maxlength="6" required />
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="newPassword" placeholder="Enter new password" required />
+                        <button type="button" class="toggle-password" onclick="togglePasswordVisibility('newPassword', this)">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
+            </form>
+            <div class="auth-footer">
+                <p><a href="#" onclick="showLogin()">Back to Login</a></p>
+            </div>
+        </div>
+    </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+    <script src="js/api.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>
