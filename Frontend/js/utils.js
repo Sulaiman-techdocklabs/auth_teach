@@ -1,15 +1,20 @@
-﻿export function showToast(message, type = 'info') {
+﻿// Toast notification
+export function showToast(message, type = 'info') {
     const toast = document.getElementById('toast');
     if (!toast) return;
+
     toast.textContent = message;
     toast.className = 'toast';
     toast.classList.add(type);
     toast.classList.add('show');
+
     clearTimeout(toast._timeout);
     toast._timeout = setTimeout(() => {
         toast.classList.remove('show');
     }, 4000);
 }
+
+// Format date
 export function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-IN', {
@@ -18,6 +23,8 @@ export function formatDate(dateString) {
         year: 'numeric'
     });
 }
+
+// Format time
 export function formatTime(dateString) {
     if (!dateString) return '--:--';
     const date = new Date(dateString);
@@ -27,10 +34,14 @@ export function formatTime(dateString) {
         hour12: true
     });
 }
+
+// Format hours
 export function formatHours(hours) {
     if (!hours) return '0.00';
     return hours.toFixed(2);
 }
+
+// Get status badge HTML
 export function getStatusBadge(status) {
     const statusMap = {
         'Full Day': 'full-day',
@@ -40,21 +51,12 @@ export function getStatusBadge(status) {
         'Approved': 'approved',
         'Rejected': 'rejected'
     };
+
     const className = statusMap[status] || '';
     return `<span class="status-badge ${className}">${status}</span>`;
 }
-export function togglePasswordVisibility(inputId, button) {
-    const input = document.getElementById(inputId);
-    if (!input) return;
-    const icon = button.querySelector('i');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.className = 'fas fa-eye-slash';
-    } else {
-        input.type = 'password';
-        icon.className = 'fas fa-eye';
-    }
-}
+
+// Check if user is authenticated
 export function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -63,6 +65,8 @@ export function checkAuth() {
     }
     return true;
 }
+
+// Handle logout
 export function handleLogout() {
     localStorage.removeItem('token');
     window.location.href = 'index.html';

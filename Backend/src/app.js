@@ -8,9 +8,10 @@ import passport from 'passport';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/auth.routes.js"; 
-import attendanceRouters from "./routers/attendance.model.js";
-import leaveRouters from "./routers/leave.model.js";
+import attendanceRoutes from "./routes/attendance.routes.js";
+import leaveRoutes from "./routes/leave.routes.js";
 import './config/passport.js';
+
 
 const app= express();
 await connectDB();
@@ -19,9 +20,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended : true }))
 const allowedOrigins = [
     'http://localhost:5500',
-    'http://localhost:5000',
+    'http://localhost:8000',
     'http://127.0.0.1:5500',
-    'http://192.168.88.5:5500',
+    'http://192.168.88.19:5500',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
