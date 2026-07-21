@@ -1,153 +1,1141 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Login - Employee Management System</title>
-    <link rel="stylesheet" href="css/auth.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow · Auth & Tasks</title>
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #eef2ff;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --success: #10b981;
+      --success-light: #d1fae5;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-500: #6b7280;
+      --gray-700: #374151;
+      --gray-900: #111827;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      background: #f3f4f6;
+      background-image: radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.05) 0%, transparent 20%), radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 20%);
+      min-height: 100vh;
+      color: var(--gray-900);
+      padding: 24px;
+    }
+
+    .app-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+
+    /* Header */
+    .app-header {
+      padding: 24px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid var(--gray-100);
+      background: var(--gray-50);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand i {
+      color: var(--primary);
+      font-size: 1.75rem;
+    }
+
+    .brand h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gray-900);
+      letter-spacing: -0.025em;
+    }
+
+    .auth-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .greeting {
+      font-weight: 500;
+      color: var(--gray-700);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .greeting i {
+      color: var(--primary);
+    }
+
+    /* Buttons */
+    .btn {
+      border: none;
+      background: var(--gray-100);
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 0.875rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--gray-700);
+    }
+
+    .btn:hover {
+      background: var(--gray-200);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-outline {
+      background: white;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-700);
+    }
+
+    .btn-outline:hover {
+      background: var(--gray-50);
+      border-color: var(--gray-500);
+    }
+
+    .btn-google {
+      background: white;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-700);
+    }
+
+    .btn-google:hover {
+      background: var(--gray-50);
+    }
+
+    .btn-danger {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: #059669;
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 32px;
+    }
+
+    /* Task Creation Form */
+    .task-form-container {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .task-form {
+      display: grid;
+      grid-template-columns: 2fr 2fr 1fr 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .input-group {
+      display: flex;
+      align-items: center;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      padding: 0 12px;
+      transition: border-color 0.2s;
+    }
+
+    .input-group:focus-within {
+      border-color: var(--primary);
+      background: white;
+    }
+
+    .input-group i {
+      color: var(--gray-500);
+      font-size: 0.9rem;
+    }
+
+    .input-group input, .input-group select, .input-group textarea {
+      border: none;
+      background: transparent;
+      padding: 10px 0;
+      font-size: 0.9rem;
+      outline: none;
+      width: 100%;
+      color: var(--gray-900);
+    }
+
+    .input-group input::placeholder {
+      color: var(--gray-500);
+    }
+
+    /* Task List */
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .task-header h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-count {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .task-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      border-left: 4px solid var(--gray-300);
+    }
+
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-left-color: var(--primary);
+    }
+
+    .task-card.priority-High { border-left-color: var(--danger); }
+    .task-card.priority-Medium { border-left-color: var(--warning); }
+    .task-card.priority-Low { border-left-color: var(--success); }
+
+    .task-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: var(--gray-900);
+      margin-bottom: 8px;
+      word-break: break-word;
+    }
+
+    .task-desc {
+      color: var(--gray-500);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      flex-grow: 1;
+      word-break: break-word;
+      white-space: pre-wrap;
+    }
+
+    .task-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .badge-priority {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .badge-priority.High { background: var(--danger-light); color: var(--danger); }
+    .badge-priority.Medium { background: var(--warning-light); color: var(--warning); }
+    .badge-priority.Low { background: var(--success-light); color: var(--success); }
+
+    .badge-status {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+    .badge-status.Completed { background: var(--success-light); color: var(--success); }
+
+    .badge-date {
+      background: var(--gray-100);
+      color: var(--gray-700);
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+      border-top: 1px solid var(--gray-100);
+      padding-top: 12px;
+    }
+
+    .icon-btn {
+      background: var(--gray-100);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-500);
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover {
+      background: var(--gray-200);
+      color: var(--gray-700);
+    }
+
+    .icon-btn.danger:hover {
+      background: var(--danger-light);
+      color: var(--danger);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 48px 0;
+      color: var(--gray-500);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      color: var(--gray-300);
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(17, 24, 39, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .modal-backdrop.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-box {
+      background: white;
+      max-width: 480px;
+      width: 90%;
+      padding: 32px;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      transform: scale(0.95);
+      transition: transform 0.2s;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop.active .modal-box {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-header h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+
+    .modal-close {
+      background: var(--gray-100);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gray-500);
+    }
+
+    .modal-close:hover {
+      background: var(--gray-200);
+    }
+
+    .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .modal-body .input-group {
+      width: 100%;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    .modal-extra {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 0.875rem;
+      color: var(--gray-500);
+    }
+
+    .modal-extra a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .modal-extra a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .toast {
+      background: white;
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      border-left: 4px solid var(--gray-300);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 280px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .toast.success { border-left-color: var(--success); }
+    .toast.error { border-left-color: var(--danger); }
+    .toast.info { border-left-color: var(--primary); }
+
+    .toast i {
+      font-size: 1.25rem;
+    }
+    .toast.success i { color: var(--success); }
+    .toast.error i { color: var(--danger); }
+    .toast.info i { color: var(--primary); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .task-form {
+        grid-template-columns: 1fr 1fr;
+      }
+      .task-form .input-group:nth-child(1), 
+      .task-form .input-group:nth-child(2) {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 0; }
+      .app-container { border-radius: 0; }
+      .app-header, .main-content { padding: 20px; }
+      .auth-section { width: 100%; justify-content: space-between; }
+      .task-form { grid-template-columns: 1fr; }
+      .task-form .input-group:nth-child(1), 
+      .task-form .input-group:nth-child(2) {
+        grid-column: span 1;
+      }
+      .modal-box { padding: 24px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-card" id="loginCard">
-            <div class="auth-header">
-                <div class="logo">
-                    <i class="fas fa-users-cog"></i>
-                    <h1>Employee Management</h1>
-                </div>
-                <p class="subtitle">Sign in to your account</p>
-            </div>
-            <!-- Login Form -->
-            <form id="loginForm" class="auth-form">
-                <div class="form-group">
-                    <label for="loginIdentifier">Email or Username</label>
-                    <input type="text" id="loginIdentifier" placeholder="Enter your email or username" required />
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="loginPassword" placeholder="Enter your password" required />
-                        <button type="button" class="toggle-password" onclick="togglePassword('loginPassword', this)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="form-options">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="rememberMe" />
-                        <span>Remember me</span>
-                    </label>
-                    <a class="forgot-link" onclick="showForgotPassword()">Forgot Password?</a>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-            </form>
-            <!-- OTP Login Section -->
-            <div class="divider"><span>or continue with</span></div>
-            <div class="otp-section">
-                <form id="otpSendForm" class="otp-send-form">
-                    <div class="form-group">
-                        <label for="otpEmail">Email</label>
-                        <input type="email" id="otpEmail" placeholder="Enter your email" required />
-                    </div>
-                    <button type="submit" class="btn btn-secondary btn-block">Send OTP</button>
-                </form>
-                <form id="otpVerifyForm" class="otp-verify-form" style="display: none;">
-                    <div class="form-group">
-                        <label for="otpCode">Enter OTP</label>
-                        <input type="text" id="otpCode" placeholder="Enter 6-digit OTP" maxlength="6" required />
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-block">Verify OTP</button>
-                </form>
-            </div>
-            <div class="social-auth">
-                <a href="http://localhost:5000/api/auth/google" class="btn btn-google">
-                    <i class="fab fa-google"></i>
-                    Continue with Google
-                </a>
-            </div>
-            <div class="auth-footer">
-                <p>Don't have an account? <a onclick="showSignup()">Sign Up</a></p>
-            </div>
-        </div>
-        <!-- Signup Card (Hidden) -->
-        <div class="auth-card" id="signupCard" style="display: none;">
-            <div class="auth-header">
-                <div class="logo">
-                    <i class="fas fa-users-cog"></i>
-                    <h1>Employee Management</h1>
-                </div>
-                <p class="subtitle">Create your account</p>
-            </div>
-            <form id="signupForm" class="auth-form">
-                <div class="form-group">
-                    <label for="signupName">Full Name</label>
-                    <input type="text" id="signupName" placeholder="Enter your full name" required />
-                </div>
-                <div class="form-group">
-                    <label for="signupUsername">Username</label>
-                    <input type="text" id="signupUsername" placeholder="Choose a username" required />
-                </div>
-                <div class="form-group">
-                    <label for="signupEmail">Email Address</label>
-                    <input type="email" id="signupEmail" placeholder="Enter your email" required />
-                </div>
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="signupPassword" placeholder="Create a password (min 6 characters)" required />
-                        <button type="button" class="toggle-password" onclick="togglePassword('signupPassword', this)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Create Account</button>
-            </form>
-            <div class="auth-footer">
-                <p>Already have an account? <a onclick="showLogin()">Sign In</a></p>
-            </div>
-        </div>
-        <!-- Forgot Password Card (Hidden) -->
-        <div class="auth-card" id="forgotCard" style="display: none;">
-            <div class="auth-header">
-                <div class="logo">
-                    <i class="fas fa-users-cog"></i>
-                    <h1>Employee Management</h1>
-                </div>
-                <p class="subtitle">Reset your password</p>
-            </div>
-            <form id="forgotForm" class="auth-form">
-                <div class="form-group">
-                    <label for="forgotEmail">Email Address</label>
-                    <input type="email" id="forgotEmail" placeholder="Enter your registered email" required />
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Send Reset OTP</button>
-            </form>
-            <form id="resetForm" class="auth-form" style="display: none;">
-                <div class="form-group">
-                    <label for="resetOTP">OTP Code</label>
-                    <input type="text" id="resetOTP" placeholder="Enter OTP" maxlength="6" required />
-                </div>
-                <div class="form-group">
-                    <label for="newPassword">New Password</label>
-                    <div class="password-input-wrapper">
-                        <input type="password" id="newPassword" placeholder="Enter new password" required />
-                        <button type="button" class="toggle-password" onclick="togglePassword('newPassword', this)">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Reset Password</button>
-            </form>
-            <div class="auth-footer">
-                <p><a onclick="showLogin()">Back to Login</a></p>
-            </div>
-        </div>
+
+<div class="app-container" id="app">
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand">
+      <i class="fas fa-bolt"></i>
+      <h1>TaskFlow</h1>
     </div>
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
     
-    <!-- IMPORTANT: Load as module -->
-    <script type="module" src="js/auth.js"></script>
+    <div class="auth-section" id="authPanel">
+      <span class="greeting" id="greetingText"><i class="fas fa-user-circle"></i> Guest Mode</span>
+      <div class="auth-btn-group" id="authButtons">
+        <button class="btn btn-primary" id="showSignupBtn"><i class="fas fa-user-plus"></i> Sign up</button>
+        <button class="btn btn-outline" id="showLoginBtn"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button class="btn btn-google" id="googleLoginBtn"><i class="fab fa-google"></i> Google</button>
+      </div>
+      <div class="auth-btn-group" id="loggedInActions" style="display:none;">
+        <button class="btn btn-outline" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Task Creation -->
+    <div class="task-form-container" id="taskCreationPanel" style="display:none;">
+      <div class="task-form">
+        <div class="input-group">
+          <i class="fas fa-pen"></i>
+          <input type="text" id="taskTitleInput" placeholder="Task title..." />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-align-left"></i>
+          <input type="text" id="taskDescInput" placeholder="Description (optional)" />
+        </div>
+        <div class="input-group">
+          <i class="fas fa-flag"></i>
+          <select id="taskPrioritySelect">
+            <option value="Low">Low</option>
+            <option value="Medium" selected>Medium</option>
+            <option value="High">High</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-calendar"></i>
+          <input type="date" id="taskDueDateInput" />
+        </div>
+        <button class="btn btn-success" id="createTaskBtn"><i class="fas fa-plus"></i> Add Task</button>
+      </div>
+    </div>
+
+    <!-- Task List -->
+    <div class="task-list-container">
+      <div class="task-header">
+        <h2><i class="fas fa-list-check"></i> My Tasks</h2>
+        <span class="badge-count" id="taskCounter">0</span>
+      </div>
+      <div id="taskContainer" class="task-grid">
+        <!-- Tasks dynamically injected -->
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Modal (Auth & Edit Task) -->
+<div class="modal-backdrop" id="modalOverlay">
+  <div class="modal-box" id="modalBox">
+    <div class="modal-header">
+      <h3 id="modalTitle">Sign up</h3>
+      <button class="modal-close" id="modalCloseBtn"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" id="modalCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="modalSubmitBtn">Submit</button>
+    </div>
+    <div class="modal-extra" id="modalExtra"></div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+  // ======================== CONFIG ========================
+  const API_BASE = 'http://localhost:5000/api'; 
+
+  // ======================== STATE ========================
+  let authToken = localStorage.getItem('taskToken') || null;
+  let currentUser = null;
+  let tasks = [];
+
+  // DOM refs
+  const $ = id => document.getElementById(id);
+  
+  // ======================== TOAST SYSTEM ========================
+  function showToast(message, type = 'info') {
+    const container = $('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    
+    let icon = 'fa-circle-info';
+    if (type === 'success') icon = 'fa-circle-check';
+    if (type === 'error') icon = 'fa-circle-exclamation';
+    
+    toast.innerHTML = `<i class="fas ${icon}"></i> <span>${message}</span>`;
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.style.animation = 'slideIn 0.3s ease-out reverse';
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  // ======================== HELPERS ========================
+  function setAuth(token, user) {
+    authToken = token;
+    currentUser = user;
+    if (token) {
+      localStorage.setItem('taskToken', token);
+      if (user) localStorage.setItem('taskUser', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('taskToken');
+      localStorage.removeItem('taskUser');
+    }
+    updateUI();
+  }
+
+  function loadStoredUser() {
+    const u = localStorage.getItem('taskUser');
+    if (u) {
+      try { currentUser = JSON.parse(u); } catch(e) { currentUser = null; }
+    }
+    if (localStorage.getItem('taskToken')) authToken = localStorage.getItem('taskToken');
+  }
+  loadStoredUser();
+
+  function updateUI() {
+    if (authToken && currentUser) {
+      $('greetingText').innerHTML = `<i class="fas fa-user-check"></i> ${currentUser.name || currentUser.email || 'User'}`;
+      $('authButtons').style.display = 'none';
+      $('loggedInActions').style.display = 'flex';
+      $('taskCreationPanel').style.display = 'block';
+      fetchTasks();
+    } else {
+      $('greetingText').innerHTML = `<i class="fas fa-user-circle"></i> Guest Mode`;
+      $('authButtons').style.display = 'flex';
+      $('loggedInActions').style.display = 'none';
+      $('taskCreationPanel').style.display = 'none';
+      $('taskContainer').innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-lock"></i>
+          <h3>Please login to manage your tasks</h3>
+        </div>`;
+      $('taskCounter').textContent = '0';
+      tasks = [];
+    }
+  }
+
+  function apiCall(method, endpoint, body = null, token = authToken) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return fetch(`${API_BASE}${endpoint}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : null
+    }).then(res => res.json().then(data => ({ status: res.status, data })));
+  }
+
+  // ======================== TASKS ========================
+  async function fetchTasks() {
+    if (!authToken) return;
+    const { status, data } = await apiCall('GET', '/tasks');
+    if (status === 200 && data.success) {
+      tasks = data.data || [];
+      renderTasks();
+    } else if (status === 401) {
+      setAuth(null, null);
+      showToast('Session expired. Please login again.', 'error');
+    }
+  }
+
+  function renderTasks() {
+    const container = $('taskContainer');
+    if (!tasks.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <i class="fas fa-clipboard-list"></i>
+          <h3>No tasks yet</h3>
+          <p>Create your first task using the form above!</p>
+        </div>`;
+      $('taskCounter').textContent = '0';
+      return;
+    }
+    
+    $('taskCounter').textContent = tasks.length;
+    container.innerHTML = tasks.map(t => `
+      <div class="task-card priority-${t.priority || 'Medium'}" data-id="${t._id}">
+        <div class="task-title">${esc(t.title)}</div>
+        <div class="task-desc">${esc(t.description || 'No description provided.')}</div>
+        <div class="task-meta">
+          <span class="badge badge-priority ${t.priority || 'Medium'}">
+            <i class="fas fa-flag"></i> ${t.priority || 'Medium'}
+          </span>
+          <span class="badge badge-status ${t.status || 'Pending'}">
+            <i class="fas fa-circle-check"></i> ${t.status || 'Pending'}
+          </span>
+          ${t.dueDate ? `
+            <span class="badge badge-date">
+              <i class="fas fa-calendar"></i> ${new Date(t.dueDate).toLocaleDateString()}
+            </span>
+          ` : ''}
+        </div>
+        <div class="task-actions">
+          <button class="icon-btn edit-task-btn" data-id="${t._id}" title="Edit Task">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="icon-btn danger delete-task-btn" data-id="${t._id}" title="Delete Task">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+    `).join('');
+
+    // attach events
+    document.querySelectorAll('.delete-task-btn').forEach(btn => {
+      btn.addEventListener('click', () => deleteTask(btn.dataset.id));
+    });
+    document.querySelectorAll('.edit-task-btn').forEach(btn => {
+      btn.addEventListener('click', () => openEditTaskModal(btn.dataset.id));
+    });
+  }
+
+  function esc(str) { 
+    return String(str).replace(/[&<>"]/g, function(m) { 
+      if (m==='&') return '&amp;'; 
+      if (m==='<') return '&lt;'; 
+      if (m==='>') return '&gt;'; 
+      if (m==='"') return '&quot;'; 
+      return m; 
+    }); 
+  }
+
+  async function createTask(title, description, priority, dueDate) {
+    const { status, data } = await apiCall('POST', '/tasks', { title, description, priority, dueDate });
+    if (status === 201 && data.success) {
+      showToast('Task created successfully!', 'success');
+      fetchTasks();
+    } else {
+      showToast('Error creating task: ' + (data.message || data.error || 'unknown'), 'error');
+    }
+  }
+
+  async function deleteTask(id) {
+    if (!confirm('Are you sure you want to delete this task?')) return;
+    const { status, data } = await apiCall('DELETE', `/tasks/${id}`);
+    if (status === 200 && data.success) {
+      showToast('Task deleted', 'success');
+      fetchTasks();
+    } else {
+      showToast('Failed to delete task', 'error');
+    }
+  }
+
+  async function updateTask(id, updates) {
+    const { status, data } = await apiCall('PUT', `/tasks/${id}`, updates);
+    if (status === 200 && data.success) {
+      showToast('Task updated successfully!', 'success');
+      fetchTasks();
+      return true;
+    } else {
+      showToast('Update failed: ' + (data.message || data.error), 'error');
+      return false;
+    }
+  }
+
+  // ======================== MODAL CONTROLLER ========================
+  function openModal(type, extraData = {}) {
+    const modalOverlay = $('modalOverlay');
+    const modalTitle = $('modalTitle');
+    const modalBody = $('modalBody');
+    const modalSubmitBtn = $('modalSubmitBtn');
+    const modalExtra = $('modalExtra');
+    
+    modalOverlay.classList.add('active');
+    let html = '';
+    modalExtra.innerHTML = '';
+
+    if (type === 'signup') {
+      modalTitle.textContent = 'Create Account';
+      html = `
+        <div class="input-group"><i class="fas fa-user"></i><input id="mName" placeholder="Full name" /></div>
+        <div class="input-group"><i class="fas fa-at"></i><input id="mEmail" placeholder="Email" type="email" /></div>
+        <div class="input-group"><i class="fas fa-user-tag"></i><input id="mUsername" placeholder="Username" /></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input id="mPassword" placeholder="Password" type="password" /></div>
+      `;
+      modalSubmitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Sign up';
+      modalSubmitBtn.onclick = () => {
+        const name = $('mName').value.trim();
+        const email = $('mEmail').value.trim();
+        const username = $('mUsername').value.trim();
+        const password = $('mPassword').value;
+        if (!name || !email || !username || !password) return showToast('All fields are required', 'error');
+        
+        modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        apiCall('POST', '/auth/signup', { name, email, username, password })
+          .then(({ status, data }) => {
+            if (status === 201 && data.success) {
+              const { token, user } = data.data;
+              setAuth(token, user);
+              closeModal();
+              showToast('Signup successful! Check your email for verification.', 'success');
+            } else {
+              showToast('Signup error: ' + (data.error || data.message), 'error');
+            }
+          }).finally(() => {
+            modalSubmitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Sign up';
+          });
+      };
+    } 
+    else if (type === 'login') {
+      modalTitle.textContent = 'Welcome Back';
+      html = `
+        <div class="input-group"><i class="fas fa-user"></i><input id="mLoginId" placeholder="Email or username" /></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input id="mLoginPass" placeholder="Password" type="password" /></div>
+      `;
+      modalSubmitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+      modalExtra.innerHTML = `
+        <a href="#" id="switchToOtp">Use OTP instead</a> · 
+        <a href="#" id="switchToForgot">Forgot password?</a>
+      `;
+      modalSubmitBtn.onclick = () => {
+        const identifiers = $('mLoginId').value.trim();
+        const password = $('mLoginPass').value;
+        if (!identifiers || !password) return showToast('Enter credentials', 'error');
+        
+        modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+        apiCall('POST', '/auth/login', { identifiers, password })
+          .then(({ status, data }) => {
+            if (status === 200 && data.success) {
+              setAuth(data.data.token, data.data.user);
+              closeModal();
+              showToast('Login successful!', 'success');
+            } else {
+              showToast('Login error: ' + (data.error || data.message), 'error');
+            }
+          }).finally(() => {
+            modalSubmitBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+          });
+      };
+      
+      setTimeout(() => {
+        const otpLink = document.getElementById('switchToOtp');
+        if (otpLink) otpLink.onclick = (e) => { e.preventDefault(); openModal('loginOtpSend'); };
+        const forgotLink = document.getElementById('switchToForgot');
+        if (forgotLink) forgotLink.onclick = (e) => { e.preventDefault(); openModal('forgotPassword'); };
+      }, 50);
+    } 
+    else if (type === 'loginOtpSend') {
+      modalTitle.textContent = 'Login with OTP';
+      html = `
+        <div class="input-group"><i class="fas fa-user"></i><input id="mOtpId" placeholder="Email or username" /></div>
+        <p style="font-size: 0.875rem; color: var(--gray-500);">We'll send a 6-digit OTP to your email.</p>
+      `;
+      modalSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+      modalSubmitBtn.onclick = () => {
+        const identifiers = $('mOtpId').value.trim();
+        if (!identifiers) return showToast('Enter email or username', 'error');
+        
+        modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        apiCall('POST', '/auth/login-otp/send', { identifiers })
+          .then(({ status, data }) => {
+            if (status === 200 && data.success) {
+              showToast('OTP sent successfully!', 'success');
+              openModal('loginOtpVerify', { email: identifiers });
+            } else {
+              showToast('OTP send error: ' + (data.error || data.message), 'error');
+            }
+          }).finally(() => {
+            modalSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+          });
+      };
+    } 
+    else if (type === 'loginOtpVerify') {
+      modalTitle.textContent = 'Verify OTP';
+      html = `
+        <div class="input-group"><i class="fas fa-envelope"></i><input id="mOtpEmail" placeholder="Email" value="${extraData.email || ''}" /></div>
+        <div class="input-group"><i class="fas fa-shield-alt"></i><input id="mOtpCode" placeholder="Enter 6-digit OTP" /></div>
+      `;
+      modalSubmitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify';
+      modalSubmitBtn.onclick = () => {
+        const email = $('mOtpEmail').value.trim();
+        const otp = $('mOtpCode').value.trim();
+        if (!email || !otp) return showToast('Email and OTP required', 'error');
+        
+        modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+        apiCall('POST', '/auth/login-otp/verify', { email, otp })
+          .then(({ status, data }) => {
+            if (status === 200 && data.success) {
+              setAuth(data.data.token, data.data.user);
+              closeModal();
+              showToast('Login successful!', 'success');
+            } else {
+              showToast('OTP verify error: ' + (data.error || data.message), 'error');
+            }
+          }).finally(() => {
+            modalSubmitBtn.innerHTML = '<i class="fas fa-check-circle"></i> Verify';
+          });
+      };
+    } 
+    else if (type === 'forgotPassword') {
+      modalTitle.textContent = 'Reset Password';
+      html = `
+        <div class="input-group"><i class="fas fa-envelope"></i><input id="mResetEmail" placeholder="Your email" /></div>
+        <p style="font-size: 0.875rem; color: var(--gray-500);">You'll receive an OTP to reset your password.</p>
+      `;
+      modalSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reset Code';
+      modalSubmitBtn.onclick = () => {
+        const email = $('mResetEmail').value.trim();
+        if (!email) return showToast('Enter email', 'error');
+        
+        modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        apiCall('POST', '/auth/forgot-password', { email })
+          .then(({ status, data }) => {
+            if (status === 200 && data.success) {
+              showToast('Reset code sent!', 'success');
+              openModal('resetPassword', { email });
+            } else {
+              showToast('Error: ' + (data.error || data.message), 'error');
+            }
+          }).finally(() => {
+            modalSubmitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Reset Code';
+          });
+      };
+    } 
+    else if (type === 'resetPassword') {
+      modalTitle.textContent = 'Set New Password';
+      html = `
+        <div class="input-group"><i class="fas fa-envelope"></i><input id="mResetEmail2" value="${extraData.email || ''}" placeholder="Email" /></div>
+        <div class="input-group"><i class="fas fa-shield-alt"></i><input id="mResetOtp" placeholder="OTP code" /></div>
+        <div class="input-group"><i class="fas fa-lock"></i><input id="mResetNewPass" placeholder="New password" type="password" /></div>
+      `;
+      modalSubmitBtn.innerHTML = '<i class="fas fa-key"></i> Reset Password';
+      modalSubmitBtn.onclick = () => {
+        const email = $('mResetEmail2').value.trim();
+        const otp = $('mResetOtp').value.trim();
+        const newPassword = $('mResetNewPass').value;
+        if (!email || !otp || !newPassword) return showToast('All fields required', 'error');
+        
+        modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Resetting...';
+        apiCall('POST', '/auth/reset-password', { email, otp, newPassword })
+          .then(({ status, data }) => {
+            if (status === 200 && data.success) {
+              showToast('Password reset successful! Please login.', 'success');
+              closeModal();
+              openModal('login');
+            } else {
+              showToast('Reset error: ' + (data.error || data.message), 'error');
+            }
+          }).finally(() => {
+            modalSubmitBtn.innerHTML = '<i class="fas fa-key"></i> Reset Password';
+          });
+      };
+    }
+    else if (type === 'editTask') {
+      modalTitle.textContent = 'Edit Task';
+      const task = extraData.task;
+      html = `
+        <div class="input-group"><i class="fas fa-pen"></i><input id="editTitle" value="${esc(task.title)}" placeholder="Title" /></div>
+        <div class="input-group" style="align-items: flex-start;">
+          <i class="fas fa-align-left" style="margin-top: 12px;"></i>
+          <textarea id="editDesc" rows="3" placeholder="Description">${esc(task.description || '')}</textarea>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="input-group"><i class="fas fa-flag"></i>
+            <select id="editPriority">
+              <option value="Low" ${task.priority === 'Low' ? 'selected' : ''}>Low</option>
+              <option value="Medium" ${task.priority === 'Medium' ? 'selected' : ''}>Medium</option>
+              <option value="High" ${task.priority === 'High' ? 'selected' : ''}>High</option>
+            </select>
+          </div>
+          <div class="input-group"><i class="fas fa-check-circle"></i>
+            <select id="editStatus">
+              <option value="Pending" ${task.status === 'Pending' ? 'selected' : ''}>Pending</option>
+              <option value="Completed" ${task.status === 'Completed' ? 'selected' : ''}>Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group"><i class="fas fa-calendar"></i>
+          <input type="date" id="editDue" value="${task.dueDate ? task.dueDate.split('T')[0] : ''}" />
+        </div>
+      `;
+      modalSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+      modalSubmitBtn.onclick = () => {
+        const updates = {
+          title: $('editTitle').value.trim(),
+          description: $('editDesc').value.trim(),
+          priority: $('editPriority').value,
+          status: $('editStatus').value,
+          dueDate: $('editDue').value
+        };
+        
+        if (!updates.title) return showToast('Title is required', 'error');
+        
+        modalSubmitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        updateTask(task._id, updates).then(success => {
+          if (success) closeModal();
+        }).finally(() => {
+          modalSubmitBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+        });
+      };
+    }
+    
+    modalBody.innerHTML = html;
+  }
+
+  function openEditTaskModal(id) {
+    const task = tasks.find(t => t._id === id);
+    if (!task) return;
+    openModal('editTask', { task });
+  }
+
+  function closeModal() { 
+    $('modalOverlay').classList.remove('active'); 
+  }
+
+  // ======================== EVENT BINDINGS ========================
+  document.addEventListener('DOMContentLoaded', () => {
+    updateUI();
+
+    $('showSignupBtn').onclick = () => openModal('signup');
+    $('showLoginBtn').onclick = () => openModal('login');
+    $('modalCloseBtn').onclick = closeModal;
+    $('modalCancelBtn').onclick = closeModal;
+    
+    $('modalOverlay').addEventListener('click', (e) => { 
+      if (e.target === $('modalOverlay')) closeModal(); 
+    });
+
+    // Google login
+    $('googleLoginBtn').onclick = () => {
+      window.location.href = `${API_BASE}/auth/google`;
+    };
+
+    // Logout
+    $('logoutBtn').onclick = () => {
+      if (confirm('Logout?')) {
+        setAuth(null, null);
+        showToast('Logged out successfully', 'info');
+      }
+    };
+
+    // Create task
+    $('createTaskBtn').onclick = () => {
+      const title = $('taskTitleInput').value.trim();
+      const description = $('taskDescInput').value.trim();
+      const priority = $('taskPrioritySelect').value;
+      const dueDate = $('taskDueDateInput').value;
+      
+      if (!title) return showToast('Title is required', 'error');
+      if (!dueDate) return showToast('Due date is required', 'error');
+      
+      createTask(title, description, priority, dueDate);
+      
+      // Clear inputs
+      $('taskTitleInput').value = '';
+      $('taskDescInput').value = '';
+      $('taskDueDateInput').value = '';
+    };
+
+    // OAuth callback detection
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenParam = urlParams.get('token');
+    if (tokenParam) {
+      apiCall('GET', '/auth/me', null, tokenParam)
+        .then(({ status, data }) => {
+          if (status === 200 && data.success) {
+            setAuth(tokenParam, data.data);
+            showToast('Google login successful!', 'success');
+            window.history.replaceState({}, document.title, window.location.pathname);
+          } else {
+            showToast('Google login failed', 'error');
+          }
+        });
+    }
+  });
+</script>
 </body>
 </html>

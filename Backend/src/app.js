@@ -8,8 +8,7 @@ import passport from 'passport';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { connectDB } from "./config/db.js";
 import authRouter from "./routes/auth.routes.js"; 
-import attendanceRoutes from "./routes/attendance.routes.js";
-import leaveRoutes from "./routes/leave.routes.js";
+import taskRoutes from "./routes/task.routes.js";
 import './config/passport.js';
 
 
@@ -22,7 +21,7 @@ const allowedOrigins = [
     'http://localhost:5500',
     'http://localhost:8000',
     'http://127.0.0.1:5500',
-    'http://192.168.88.19:5500',
+    'http://192.168.88.12:5500',
     process.env.FRONTEND_URL
 ].filter(Boolean);
 
@@ -75,9 +74,7 @@ app.get('/test', (req, res) => {
     });
 });
 app.use('/api/auth',authRouter);
-app.use("/api/attendance", attendanceRoutes);
-
-app.use("/api/leaves", leaveRoutes);
+app.use("/api/tasks", taskRoutes);
 
 app.use((req, res) => {
     res.status(404).json({
