@@ -57,37 +57,54 @@ export const signup = async (req, res) => {
     }
 
 }
-
 export const verifyEmail = async (req, res) => {
     try {
         const { token } = req.params;
         const user = await User.findOne({ verificationToken: token });
 
+        const frontendUrl = "http://localhost:5500";
+
+        // HTML Template for Success
+        const successHtml = `
+            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+                <h1 style="color: #28a745;">Email Verified Successfully! 🎉</h1>
+                <p style="font-size: 18px; color: #333;">Thank you for verifying your email address. Your account is now active.</p>
+                <a href="${frontendUrl}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">Go to Home Page</a>
+            </div>
+        `;
+
+        // HTML Template for Invalid Token
+        const invalidTokenHtml = `
+            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+                <h1 style="color: #dc3545;">Verification Failed ⚠️</h1>
+                <p style="font-size: 18px; color: #333;">The verification token is invalid or has already been used.</p>
+                <a href="${frontendUrl}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">Go to Home Page</a>
+            </div>
+        `;
+
+        // HTML Template for Server Errors
+        const errorHtml = (errorMessage) => `
+            <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+                <h1 style="color: #dc3545;">Something Went Wrong ❌</h1>
+                <p style="font-size: 18px; color: #333;">${errorMessage}</p>
+                <a href="${frontendUrl}" style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">Go to Home Page</a>
+            </div>
+        `;
+
         if (!user) {
-            return res.status(400).json({
-                success: false,
-                error: "Invalid verification token"
-            })
+            return res.status(400).send(invalidTokenHtml);
         }
 
         user.isVerified = true;
         user.verificationToken = null;
         await user.save();
 
-        res.status(200).json({
-            success: true,
-            message: "Email verified successfully"
-        });
+        res.status(200).send(successHtml);
+
     } catch (error) {
-        res.status(400).json({
-            success: false,
-            error: error.message
-        })
+        res.status(400).send(errorHtml(error.message));
     }
-
 }
-
-
 export const sendLoginOtp = async (req, res) => {
     try {
         const { identifiers } = req.body;
